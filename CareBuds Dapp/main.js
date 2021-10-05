@@ -14,6 +14,7 @@ async function login() {
             document.getElementById("connectWalletBtn").style.display = "none";
             document.getElementById("connectWalletBtnRt").style.display = "none";
             document.getElementById("BudsRewardsDapp").style.display = "block";
+            document.getElementById("logoutBtn").style.display = "block";
             totalRewards();
     } catch (error) {
         console.log(error);
