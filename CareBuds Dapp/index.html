@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+        <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+        <title>CareBuds Finance</title>
+        <!-- Moralis -->
+        <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/moralis/dist/moralis.js"></script>
+        <script type="text/javascript" src="./abi.js"></script>
+        <!-- MDB icon -->
+        <link
+        rel="icon" href="img/mdb-favicon.ico" type="image/x-icon"/>
+        <!-- Font Awesome -->
+        <link
+        rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"/>
+        <!-- Google Fonts Roboto -->
+        <link
+        rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"/>
+        <!-- MDB -->
+        <link rel="stylesheet" href="css/mdb.dark.min.css"/>
+    </head>
+
+
+    <body>
+        <!-- Navbar -->
+        <nav
+            class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+            <!-- Container wrapper -->
+            <div
+                class="container-fluid">
+                <!-- Toggle button -->
+                <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <!-- Collapsible wrapper -->
+                <div
+                    class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <!-- Navbar brand -->
+                    <a class="navbar-brand mt-2 mt-lg-0" href="#">
+                        <img src="https://mdbootstrap.com/img/logo/mdb-transaprent-noshadows.png" height="28" alt="" loading="lazy"/>
+                        <small>CareBuds Finance</small>
+                    </a>
+                    <!-- Left links -->
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Team</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Projects</a>
+                        </li>
+                    </ul>
+                    <!-- Left links -->
+                </div>
+                <!-- Collapsible wrapper -->
+
+                <!-- Right elements -->
+                <div class="d-flex align-items-center">
+                    <button id="connectWalletBtnRt" type="button" class="btn btn-link px-3 me-2">
+                        Connect Wallet
+                    </button>
+                    <button id="logoutBtn" type="button" class="btn btn-primary me-3">
+                        Logout
+                    </button>
+                    <a class="btn btn-light px-3" href="https://github.com/mdbootstrap/mdb-ui-kit" role="button">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+                <!-- Right elements -->
+            </div>
+            <!-- Container wrapper -->
+        </nav>
+        <!-- Navbar -->
+        <!-- CareBuds Finance Wallet Gate-->
+        <div class="container">
+            <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+                <div class="text-center" id="connectWalletBtn">
+                    <img class="mb-4" src="img/CareBudsLogo.png" style="width: 280px;"/>
+                    <h5 class="mb-3">Welcome to CareBuds Finance</h5>
+                    <p class="mb-3">Please Make Sure Your Wallet is on the BSC Network</p>
+                    <a class="btn btn-primary btn-lg" id="connectWalletBtn" role="button">Connect Wallet
+                    </a>
+                </div>
+
+                <!-- Buds Reward Container -->
+                <!-- Container for demo purpose -->
+                <div
+                    class="container my-5 p-5" style="display: none;" id="BudsRewardsDapp">
+
+                    <!--Section: Design Block-->
+                    <section class="text-center">
+
+                        <h1 class="mb-3 text-uppercase">Buds Rewards</h1>
+
+                        <p class="mb-5 mx-auto w-responsive">
+                            Claim your buds depending on how much you hodl!
+                        </p>
+
+                        <div class="row">
+                            <div class="col-md-12 col-lg-4 mb-4 mb-lg-0">
+                                <div class="card">
+                                    <div class="bg-image hover-overlay hover-zoom ripple" data-mdb-ripple-color="light">
+                                        <img src="https://mdbootstrap.com/img/Photos/Horizontal/Work/4-col/img%20%2812%29.jpg" class="img-fluid"/>
+                                        <a href="#!">
+                                            <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                                        </a>
+                                    </div>
+                                    <div class="card-body">
+                                        <h4 class="text-primary mt-2 mb-4">
+                                            Rewards Pool</h4>
+                                        <div class="row">
+                                            <h6>Total Buds Available</h6>
+                                            <p id="budsRewardPool"></p>
+                                        </div>
+
+                                        <div>
+                                            <h6>Current Reward Cycle</h6>
+                                            <p id="rewardsCycle"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 mb-4 mb-md-0">
+                                <div class="card">
+                                    <div class="bg-image hover-overlay hover-zoom ripple" data-mdb-ripple-color="light">
+                                        <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20%28132%29.jpg" class="img-fluid"/>
+                                        <a href="#!">
+                                            <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                                        </a>
+                                    </div>
+                                    <div class="card-body">
+                                        <h4 class="text-primary mt-2 mb-4">
+                                            Buds Balance</h4>
+                                        <div>
+                                            <row>
+                                                <h6>Your Buds</h6>
+                                                <p id="budsBalanceNum"></p>
+                                            </row>
+                                        </div>
+                                        <div>
+                                            <row>
+                                                <h6>Your Rewards</h6>
+                                                <p id="rewardsAmount">Amount of Rewards</p>
+                                            </row>
+                                        </div>
+                                        <button id="budsClaimRewards" class="btn btn-primary btn-md mb-2">Claim Rewards</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 mb-0">
+                                <div class="card">
+                                    <div class="bg-image hover-overlay hover-zoom ripple" data-mdb-ripple-color="light">
+                                        <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20%28120%29.jpg" class="img-fluid"/>
+                                        <a href="#!">
+                                            <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                                        </a>
+                                    </div>
+                                    <div class="card-body">
+                                        <h4 class="text-primary mt-2 mb-4">
+                                            Dividends</h4>
+                                        <div>
+                                            <row>
+                                                <h6>Total Dividends</h6>
+                                                <p id="budsDividendsPool"></p>
+                                            </row>
+                                        </div>
+                                        <div>
+                                            <row>
+                                                <h6>When Milestone?</h6>
+                                                <p>Together we rise!</p>
+                                            </row>
+                                        </div>
+                                        <button class="btn btn-primary btn-md mb-2">Soon</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </section>
+                    <!--Section: Design Block-->
+
+                </div>
+                <!-- Container for demo purpose -->
+                <!-- End your project here-->
+
+                <!-- MDB --><script type="text/javascript" src="js/mdb.min.js"> </script>
+                <!-- Custom scripts -->
+                <script type="text/javascript" src="main.js"></script>
+            </body>
+        </html>
+    </body>
+</html>
