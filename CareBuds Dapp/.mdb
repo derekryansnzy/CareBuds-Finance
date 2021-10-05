@@ -4,5 +4,6 @@
     "starter": "mdb5-essential-standard",
     "type": "frontend"
   },
-  "hash": "56d76eb1"
+  "hash": "56d76eb1",
+  "domain": "budsrewards.carebuds.us"
 }
