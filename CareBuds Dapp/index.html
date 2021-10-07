@@ -9,6 +9,7 @@
         <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
         <script src="https://unpkg.com/moralis/dist/moralis.js"></script>
+       <!--- <script src="https://github.com/WalletConnect/walletconnect-monorepo/releases/download/1.6.5/web3-provider.min.js"></script> ->
         <script type="text/javascript" src="./abi.js"></script>
         <!-- MDB icon -->
         <link
@@ -56,10 +57,14 @@
                             <a class="nav-link" target="blank" href="https://bscscan.com/token/0x058cdF0fF70f19629D4F50faC03610302e746e58">Buds Contract</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" target="blank" href="#">Buy Buds</a>
+                            <a class="nav-link" target="blank" href="https://fegex.com/trade/bsc/0x3f522fed715f13ebded34f79c3393d171ef63885">Buy Buds</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" target="blank" href="https://charts.fegex.com/charts/0x3f522fed715f13ebded34f79c3393d171ef63885">Buds Chart</a>
                         </li>
                     </ul>
                     <!-- Left links -->
+                    
                 </div>
                 <!-- Collapsible wrapper -->
 
@@ -123,6 +128,10 @@
                                             <h6>Current Reward Cycle</h6>
                                             <p id="rewardsCycle"></p>
                                         </div>
+                                        <div>
+                                            <h6>Sum of All Holdr Balances</h6>
+                                            <p id="sumOfHolders"></p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -139,18 +148,56 @@
                                             Buds Balance</h4>
                                         <div>
                                             <row>
-                                                <h6>Your Buds</h6>
-                                                <p id="budsBalanceNum">Buy Some Buds</p>
+                                                <h6 class="mb-3">Your Buds</h6>
+                                                <p id="budsBalanceNum" class="mb-0">Buy Some Buds</p>
+                                                <p class="small"> Or Refresh if You Don't See Your Balance</p>
                                             </row>
                                         </div>
                                         <div>
-                                            <row>
-                                                <h6>Your Rewards</h6>
-                                                <p id="rewardsAmount">Amount of Rewards</p>
-                                            </row>
+                                                <h6 class="mb-0">Your Rewards</h6>
+                                                <p id="rewardsAmount" class="mb-1">Beep Boop Math Machine Broken, Please Hold</p>
+                                                <button type="button" class="btn btn-outline-info btn-sm mb-3" id="formula" 
+                                                data-mdb-ripple-color="dark" data-mdb-toggle="modal"
+                                                data-mdb-target="#formulaModal">
+                                                     Click Here to See Formula
+                                                  </button>
                                         </div>
                                         <button id="budsClaimRewards" class="btn btn-primary btn-md mb-2">Claim Rewards</button>
                                     </div>
+                                </div>
+
+                                <!-- Modal -->
+                                <div
+                                class="modal fade"
+                                id="formulaModal"
+                                tabindex="-1"
+                                aria-labelledby="formulaModalLabel"
+                                aria-hidden="true"
+                                >
+                                <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <h5 class="modal-title" id="formulaModalLabel">Buds Rewards Formula</h5>
+                                    <button
+                                        type="button"
+                                        class="btn-close"
+                                        data-mdb-dismiss="modal"
+                                        aria-label="Close"
+                                    ></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h3>How Buds Rewards are Calculated</h3>
+                                        <p class="mb-1"> (Your Balannce * Current Amount of Rewards in Pool) / Sum of All Holders' Balances</p>
+                                        <p class="mb-1 small"> This is an estimated amount since the numbers are pulled and generated live from the blockchain.</p>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+                                        Close
+                                    </button>
+                                    </div>
+                                </div>
+                                </div>
                                 </div>
                             </div>
                             <div class="col-md-6 col-lg-4 mb-0">
@@ -176,7 +223,7 @@
                                                 <p>Together we rise!</p>
                                             </row>
                                         </div>
-                                        <button class="btn btn-primary btn-md mb-2">Soon</button>
+                                        <button class="btn btn-primary btn-md mb-2" disabled>Soon</button>
                                     </div>
                                 </div>
                             </div>
