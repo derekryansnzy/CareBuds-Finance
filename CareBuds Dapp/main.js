@@ -1,14 +1,27 @@
-Moralis.initialize("KVsRENKf8Y0FrI0l57LMYMjRJsQTd8UbYP36qFV0"); // Application id from moralis.io
-Moralis.serverURL = "https://gdbymlyoujf7.moralishost.com:2053/server"; // Server url from moralis.io
+// Moralis.initialize("KVsRENKf8Y0FrI0l57LMYMjRJsQTd8UbYP36qFV0"); // Application id from moralis.io
+// Moralis.serverURL = "https://gdbymlyoujf7.moralishost.com:2053/server"; // Server url from moralis.io
 
+serverUrl = "https://gdbymlyoujf7.moralishost.com:2053/server"
+appId = "KVsRENKf8Y0FrI0l57LMYMjRJsQTd8UbYP36qFV0"
+Moralis.start({serverUrl, appId});
 
- async function login() {
+login = async () => {
     const web3 = await Moralis.enable();
-
     try {
         currentUser = await Moralis.User.current();
         if (!currentUser) {
-            currentUser = await Moralis.authenticate().then(function (user) {
+            currentUser = await Moralis.authenticate({
+                provider: "walletconnect",
+                chainId: 0x38,
+                mobileLinks: [
+                    "rainbow",
+                    "metamask",
+                    "argent",
+                    "trust",
+                    "imtoken",
+                    "pillar",
+                ]
+            }).then(function (user) {
                 console.log(user.get('ethAddress'))
             })
         }
@@ -23,7 +36,6 @@ Moralis.serverURL = "https://gdbymlyoujf7.moralishost.com:2053/server"; // Serve
     }
 }
 
-
 logout = async () => {
     await Moralis.User.logOut();
     console.log(currentUser);
@@ -32,41 +44,31 @@ logout = async () => {
     document.getElementById("BudsRewardsDapp").style.display = "none";
 }
 
-
-async function userBudsBalance() {
+userBudsBalance = async () => {
+    const web3 = await Moralis.enable();
     const chainOptions = {
         chain: "bsc"
-    }
-    const balances = await Moralis.Web3API.account.getTokenBalances(chainOptions);
-    // const tokenAddress =  "0x720b40cd711df11e62dfd0c88797da100d5f09e6"; // 420 Contract Address
-    const tokenAddress = "0x058cdf0ff70f19629d4f50fac03610302e746e58";
-    // Buds Contract Address
-    // const tokenBalance = balances.find((token) => token.token_address === tokenAddress);
-    const tokenBalance = balances.find((token) => token.token_address === tokenAddress);
-    console.log(tokenBalance.balance); // do your log here
-    return tokenBalance.balance;
-}
-
-const tokenBalance = userBudsBalance()
-
-tokenBalance.then((value) => {
-    console.log(value);
-    document.getElementById("budsBalanceNum").innerHTML = value / 10 ** 9;
-}, function (error) {
-    console.log(error);
-});
-
-async function claimBudsRewards() {
-    const web3 = await Moralis.enable();
-    const Rewards = {
-        contractAddress: "0x058cdF0fF70f19629D4F50faC03610302e746e58",
-        functionName: "claimRewards",
-        abi: window.abi
     };
-    const BudsRewards = await Moralis.executeFunction(Rewards);
+    const balances = await Moralis.Web3API.account.getTokenBalances(chainOptions);
+    const tokenAddress = "0x058cdf0ff70f19629d4f50fac03610302e746e58"; // Buds Contract Address
+    const tokenBalance = balances.find((token) => token.token_address === tokenAddress);
+    if (tokenBalance) {
+        return tokenBalance.balance;
+    } else {
+        return null;
+    }
 }
 
-async function totalRewards() {
+userBudsBalance().then((balance) => {
+    updateHTML(balance);
+    console.log(balance);
+})
+
+updateHTML = async (value) => {
+    document.getElementById("budsBalanceNum").innerHTML = value / 10 ** 9;
+}
+
+totalRewards = async () => {
     const web3 = await Moralis.enable();
     let contractAbi = [{
             "inputs": [],
@@ -118,42 +120,41 @@ async function totalRewards() {
         abi: contractAbi
     };
     x = await Moralis.executeFunction(options)
+    console.log(options);
 }
 
-
 x = totalRewards()
-
 x.then(function (value) {
-    console.log(value);
-    b = tokenBalance;
-    console.log(b);
-    // need a way to parse b
-
-    y = x.budsAccumulationFromRewardsFee / 10 ** 9;
-    console.log(y);
-    parseInt(y);
-    console.log(parseInt(y));
-    z = x.sumOfAllHOLDRBalances / 10 ** 9;
-    console.log(z);
-
-    a = y / z;
-    console.log(a);
-    // this worked
-
-
-    /* amount of rewards is calculated by:
-            ((tokenBalance * x.budsAccumulationFromRewardsFee) / x.sumOfAllHOLDRBalances) / 10**9;
-            problem is the first two steps are already resulting in NaN
-            */
-
-    document.getElementById("budsRewardPool").innerHTML = y;
+    document.getElementById("budsRewardPool").innerHTML = x.budsAccumulationFromRewardsFee / 10 ** 9;
     document.getElementById("rewardsCycle").innerHTML = x.theCurrentRewardsCycle;
-    document.getElementById("budsDividendsPool").innerHTML = x.dividendsLeftFromReservedSupplyForHOLDRs / 10 ** 9;
-    document.getElementById("sumOfHolders").innerHTML = x.sumOfAllHOLDRBalances / 10**9;
-  //  document.getElementById("rewardsAmount").innerHTML = a;
-}, function (error) {
-    console.log(error);
-});
+    document.getElementById("sumOfHolders").innerHTML = x.sumOfAllHOLDRBalances / 10 ** 9;
+    document.getElementById("budsDividendsPool").innerHTML = x.sumOfAllHOLDRBalances / 10 ** 9;
+})
+
+claimableRewards = async () => {
+    const userEligibility = await userBudsBalance();
+    console.log(userEligibility);
+};
+
+claimBudsRewards = async () => {
+    const web3 = await Moralis.enable();
+
+    let rewardsAbi = [{
+            "inputs": [],
+            "name": "claimRewards",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },]
+
+    const Rewards = {
+        contractAddress: "0x058cdF0fF70f19629D4F50faC03610302e746e58",
+        functionName: "claimRewards",
+        abi: rewardsAbi
+    };
+    const claimRewards = await Moralis.executeFunction(Rewards);
+    console.log(claimBudsRewards);
+}
 
 
 document.getElementById("connectWalletBtn").onclick = login;
