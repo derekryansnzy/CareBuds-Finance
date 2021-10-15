@@ -11,16 +11,16 @@ login = async () => {
         currentUser = await Moralis.User.current();
         if (!currentUser) {
             currentUser = await Moralis.authenticate({
-                provider: "walletconnect",
-                chainId: 0x38,
-                mobileLinks: [
-                    "rainbow",
-                    "metamask",
-                    "argent",
-                    "trust",
-                    "imtoken",
-                    "pillar",
-                ]
+                // provider: "walletconnect",
+                // chainId: 0x38,
+                // mobileLinks: [
+                //     "rainbow",
+                //     "metamask",
+                //     "argent",
+                //     "trust",
+                //     "imtoken",
+                //     "pillar",
+                // ]
             }).then(function (user) {
                 console.log(user.get('ethAddress'))
             })
